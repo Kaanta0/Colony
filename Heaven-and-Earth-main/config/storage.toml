@@ -1,0 +1,152 @@
+# Storage configuration for Heaven & Earth
+# Defines where each collection is stored and the expected schema version.
+
+[collections.players]
+path = "playerdata/{guild_id}/players/{key}.toml"
+# Version 4 restores the core cultivation realm ladder and remaps legacy player realm labels.
+version = 4
+version_scope = "playerdata/{guild_id}"
+
+[collections.worlds]
+path = "data/worlds/{guild_id}/world.toml"
+section = "world"
+version = 1
+version_scope = "data/worlds/{guild_id}"
+migration = "worlds"
+
+[collections.admins]
+path = "data/worlds/{guild_id}/world.toml"
+section = "admins"
+version = 1
+version_scope = "data/worlds/{guild_id}"
+migration = "worlds"
+
+[collections.config]
+path = "data/worlds/{guild_id}/world.toml"
+section = "config"
+version = 1
+version_scope = "data/worlds/{guild_id}"
+migration = "worlds"
+
+[collections.cultivation_stages]
+path = "data/worlds/{guild_id}/world.toml"
+section = "cultivation_stages"
+version = 2
+version_scope = "data/worlds/{guild_id}"
+migration = "worlds"
+
+[collections.cultivation_techniques]
+path = "data/worlds/{guild_id}/world.toml"
+section = "cultivation_techniques"
+version = 1
+version_scope = "data/worlds/{guild_id}"
+migration = "worlds"
+
+[collections.skills]
+path = "data/worlds/{guild_id}/world.toml"
+section = "skills"
+version = 1
+version_scope = "data/worlds/{guild_id}"
+migration = "worlds"
+
+[collections.items]
+path = "data/worlds/{guild_id}/world.toml"
+section = "items"
+version = 1
+version_scope = "data/worlds/{guild_id}"
+migration = "worlds"
+
+[collections.traits]
+path = "data/worlds/{guild_id}/world.toml"
+section = "traits"
+version = 1
+version_scope = "data/worlds/{guild_id}"
+migration = "worlds"
+
+[collections.races]
+path = "data/worlds/{guild_id}/world.toml"
+section = "races"
+version = 1
+version_scope = "data/worlds/{guild_id}"
+migration = "worlds"
+
+[collections.quests]
+path = "data/worlds/{guild_id}/world.toml"
+section = "quests"
+version = 1
+version_scope = "data/worlds/{guild_id}"
+migration = "worlds"
+
+[collections.enemies]
+path = "data/worlds/{guild_id}/world.toml"
+section = "enemies"
+version = 1
+version_scope = "data/worlds/{guild_id}"
+migration = "worlds"
+
+[collections.bosses]
+path = "data/worlds/{guild_id}/world.toml"
+section = "bosses"
+version = 1
+version_scope = "data/worlds/{guild_id}"
+migration = "worlds"
+
+[collections.npcs]
+path = "data/worlds/{guild_id}/world.toml"
+section = "npcs"
+version = 1
+version_scope = "data/worlds/{guild_id}"
+migration = "worlds"
+
+[collections.locations]
+path = "data/worlds/{guild_id}/world.toml"
+section = "locations"
+version = 1
+version_scope = "data/worlds/{guild_id}"
+migration = "worlds"
+
+[collections.shop]
+path = "data/worlds/{guild_id}/world.toml"
+section = "shop"
+version = 1
+version_scope = "data/worlds/{guild_id}"
+migration = "worlds"
+
+[collections.currencies]
+path = "data/worlds/{guild_id}/world.toml"
+section = "currencies"
+version = 1
+version_scope = "data/worlds/{guild_id}"
+migration = "worlds"
+
+[collections.titles]
+path = "data/worlds/{guild_id}/world.toml"
+section = "titles"
+version = 1
+version_scope = "data/worlds/{guild_id}"
+migration = "worlds"
+
+[collections.bonds]
+path = "data/worlds/{guild_id}/world.toml"
+section = "bonds"
+version = 1
+version_scope = "data/worlds/{guild_id}"
+migration = "worlds"
+
+[collections.static_skills]
+path = "data/static/skills/{key}.toml"
+version = 1
+version_scope = "data/static"
+migration = "static_content"
+
+[collections.static_items]
+path = "data/static/items/{key}.toml"
+version = 1
+version_scope = "data/static"
+migration = "static_content"
+
+[collections.static_traits]
+path = "data/static/traits/{key}.toml"
+version = 1
+version_scope = "data/static"
+migration = "static_content"
