@@ -517,14 +517,7 @@ void Application::InitializeViews()
         {
             continue;
         }
-        if (id == kHeavenEarthProgramId)
-        {
-            viewRegistry_.Register(viewFactory_.CreateHeavenEarthView(id));
-        }
-        else
-        {
-            viewRegistry_.Register(viewFactory_.CreateSimpleTextView(id));
-        }
+        viewRegistry_.Register(viewFactory_.CreateSimpleTextView(id));
     }
     viewRegistry_.BindContent(content_);
 }
