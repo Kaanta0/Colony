@@ -70,9 +70,9 @@
         "id": "hub_games",
         "titleKey": "hub.branches.games.title",
         "descriptionKey": "hub.branches.games.body",
-        "accentColor": "#60A5FA",
+        "accentColor": "#9D5CFF",
         "channelId": "games",
-        "programId": "GAMES_STARFORGE_TRAINER",
+        "programId": "GAMES_HEAVEN_EARTH",
         "tags": [
           "hub.branches.games.tags.arcade",
           "hub.branches.games.tags.training"
@@ -124,6 +124,7 @@
       "id": "games",
       "label": "Games",
       "programs": [
+        "GAMES_HEAVEN_EARTH",
         "GAMES_SIMULATION_DECK",
         "GAMES_TACTICAL_BRIEFING",
         "GAMES_STARFORGE_TRAINER"
@@ -410,6 +411,48 @@
       "heroGradient": [
         "#261022",
         "#10050F"
+      ]
+    },
+    "GAMES_HEAVEN_EARTH": {
+      "heading": "Heaven & Earth Command Deck",
+      "tagline": "Monitor your Discord cultivation RPG with a cinematic control surface.",
+      "paragraphs": [
+        "Survey martial soul archives, cultivation milestones, and elemental distributions in one glance.",
+        "Queue story beats and seasonal events while keeping player progress close at hand."
+      ],
+      "heroHighlights": [
+        "Live codex spotlight of your rarest martial souls",
+        "Affinity spectrum and grade ladder pulled directly from bot data",
+        "Realm milestone cheat-sheets for quick narration"
+      ],
+      "sections": [
+        {
+          "title": "Codex shortcuts",
+          "options": [
+            "Featured martial souls",
+            "Affinity distribution",
+            "Cultivation realm tracker"
+          ]
+        },
+        {
+          "title": "Campaign actions",
+          "options": [
+            "Plan expedition arcs",
+            "Schedule breakthroughs",
+            "Broadcast patch notes"
+          ]
+        }
+      ],
+      "primaryActionLabel": "Launch codex",
+      "statusMessage": "Heaven & Earth interface primed for your next session.",
+      "version": "Codex UI 1.0",
+      "installState": "Integrated",
+      "availability": "Online",
+      "lastLaunched": "New command deck deployed",
+      "accentColor": "#9D5CFF",
+      "heroGradient": [
+        "#1F142A",
+        "#09050F"
       ]
     },
     "GAMES_STARFORGE_TRAINER": {

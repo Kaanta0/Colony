@@ -166,6 +166,7 @@ class Application
 
     static constexpr std::string_view kLocalAppsChannelId = "local_apps";
     static constexpr std::string_view kLocalAppsChannelLabel = "Local Apps";
+    static constexpr std::string_view kHeavenEarthProgramId = "GAMES_HEAVEN_EARTH";
 
     sdl::WindowHandle window_;
     sdl::RendererHandle renderer_;
