@@ -29,6 +29,7 @@ add_library(colony_ui
     src/frontend/views/settings_view.cpp
     src/frontend/views/dashboard_page.cpp
     src/frontend/models/library_view_model.cpp
+    src/game/heaven_earth_data.cpp
     src/ui/layout.cpp
     src/ui/theme.cpp
     src/ui/program_visuals.cpp
@@ -37,6 +38,7 @@ add_library(colony_ui
     src/ui/library_panel.cpp
     src/ui/hero_panel.cpp
     src/ui/settings_panel.cpp
+    src/views/heaven_earth_view.cpp
     src/views/simple_text_view.cpp
     src/views/view_registry.cpp
     src/views/view_factory.cpp
