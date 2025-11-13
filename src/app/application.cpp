@@ -517,7 +517,14 @@ void Application::InitializeViews()
         {
             continue;
         }
-        viewRegistry_.Register(viewFactory_.CreateSimpleTextView(id));
+        if (id == kHeavenEarthProgramId)
+        {
+            viewRegistry_.Register(viewFactory_.CreateHeavenEarthView(id));
+        }
+        else
+        {
+            viewRegistry_.Register(viewFactory_.CreateSimpleTextView(id));
+        }
     }
     viewRegistry_.BindContent(content_);
 }
@@ -1052,6 +1059,12 @@ void Application::HandleMouseClick(int x, int y)
             }
             return;
         }
+    }
+    else if (viewActionRect_.has_value() && PointInRect(*viewActionRect_, x, y))
+    {
+        viewRegistry_.TriggerPrimaryAction(statusBuffer_);
+        UpdateStatusMessage(statusBuffer_);
+        return;
     }
     else if (heroActionRect_.has_value() && PointInRect(*heroActionRect_, x, y))
     {
@@ -1654,7 +1667,8 @@ void Application::RenderMainInterfaceFrame(double deltaSeconds)
 
     frontend::views::DashboardPage dashboardPage;
     frontend::views::DashboardLayout layout = dashboardPage.Compute(contentRect, detailWidth, topBarHeight, layoutGutter);
-    libraryRect_ = layout.libraryArea;
+    SDL_Rect libraryArea = layout.libraryArea;
+    libraryRect_ = libraryArea;
     heroRect_ = layout.detailArea;
 
     const int statusBarHeight = ui::Scale(kStatusBarHeight);
@@ -1705,27 +1719,107 @@ void Application::RenderMainInterfaceFrame(double deltaSeconds)
     });
     auto programEntries = libraryViewModel_.BuildProgramList(content_, activeChannelIndex_, channelSelections_);
 
-    auto libraryResult = libraryPanel_.Render(
+    const bool hasActiveView = !activeProgramId_.empty() && !IsSettingsProgramId(activeProgramId_)
+        && viewRegistry_.ActiveView() != nullptr;
+    const int viewSplitGutter = ui::Scale(24);
+    const int minViewWidth = ui::Scale(460);
+    const int preferredListWidth = ui::Scale(320);
+    const int minListWidth = ui::Scale(260);
+    const int maxListWidth = ui::Scale(380);
+
+    SDL_Rect libraryListRect = libraryArea;
+    std::optional<SDL_Rect> activeViewRect;
+    bool renderLibraryList = true;
+
+    if (hasActiveView)
+    {
+        const int availableWidth = libraryArea.w;
+        if (availableWidth >= minViewWidth + minListWidth + viewSplitGutter)
+        {
+            const int maxListAllowed = availableWidth - minViewWidth - viewSplitGutter;
+            const int clampedMaxList = std::max(minListWidth, std::min(maxListWidth, maxListAllowed));
+            const int listWidth = std::clamp(preferredListWidth, minListWidth, clampedMaxList);
+            libraryListRect.w = listWidth;
+            activeViewRect = SDL_Rect{
+                libraryArea.x + listWidth + viewSplitGutter,
+                libraryArea.y,
+                availableWidth - listWidth - viewSplitGutter,
+                libraryArea.h};
+        }
+        else if (availableWidth >= minViewWidth)
+        {
+            activeViewRect = libraryArea;
+            renderLibraryList = false;
+        }
+    }
+
+    SDL_SetRenderDrawColor(
         renderer_.get(),
-        theme_,
-        interactions_,
-        layout.libraryArea,
-        content_,
-        activeChannelIndex_,
-        programVisuals_,
-        fonts_.channel.get(),
-        fonts_.tileMeta.get(),
-        showAddButton,
-        timeSeconds,
-        deltaSeconds,
-        libraryFilterDraft_,
-        libraryFilterFocused_,
-        programEntries,
-        sortChips);
-    programTileRects_ = libraryResult.tileRects;
-    addAppButtonRect_ = libraryResult.addButtonRect;
-    programTileProgramIds_ = libraryResult.programIds;
-    librarySortChipHitboxes_.clear();
+        theme_.libraryBackground.r,
+        theme_.libraryBackground.g,
+        theme_.libraryBackground.b,
+        theme_.libraryBackground.a);
+    SDL_RenderFillRect(renderer_.get(), &libraryArea);
+
+    ui::LibraryRenderResult libraryResult{};
+    if (renderLibraryList && libraryListRect.w > 0)
+    {
+        libraryResult = libraryPanel_.Render(
+            renderer_.get(),
+            theme_,
+            interactions_,
+            libraryListRect,
+            content_,
+            activeChannelIndex_,
+            programVisuals_,
+            fonts_.channel.get(),
+            fonts_.tileMeta.get(),
+            showAddButton,
+            timeSeconds,
+            deltaSeconds,
+            libraryFilterDraft_,
+            libraryFilterFocused_,
+            programEntries,
+            sortChips);
+        programTileRects_ = libraryResult.tileRects;
+        addAppButtonRect_ = libraryResult.addButtonRect;
+        programTileProgramIds_ = libraryResult.programIds;
+        librarySortChipHitboxes_.clear();
+        libraryRect_ = libraryListRect;
+    }
+    else
+    {
+        programTileRects_.clear();
+        addAppButtonRect_.reset();
+        programTileProgramIds_.clear();
+        librarySortChipHitboxes_.clear();
+        libraryRect_ = libraryArea;
+    }
+
+    viewActionRect_.reset();
+    if (activeViewRect.has_value())
+    {
+        SDL_Rect viewContainer = *activeViewRect;
+        SDL_Color viewFill = color::Mix(theme_.libraryCard, theme_.background, 0.45f);
+        SDL_Color viewBorder = color::Mix(viewFill, theme_.border, 0.6f);
+        const int viewCornerRadius = ui::Scale(26);
+        SDL_SetRenderDrawColor(renderer_.get(), viewFill.r, viewFill.g, viewFill.b, 245);
+        drawing::RenderFilledRoundedRect(renderer_.get(), viewContainer, viewCornerRadius);
+        SDL_SetRenderDrawColor(renderer_.get(), viewBorder.r, viewBorder.g, viewBorder.b, 255);
+        drawing::RenderRoundedRect(renderer_.get(), viewContainer, viewCornerRadius);
+
+        const int viewPadding = ui::Scale(26);
+        SDL_Rect viewBounds{
+            viewContainer.x + viewPadding,
+            viewContainer.y + viewPadding,
+            std::max(0, viewContainer.w - viewPadding * 2),
+            std::max(0, viewContainer.h - viewPadding * 2)};
+        viewRegistry_.RenderActive(viewContext_, viewBounds);
+        if (const auto actionRect = viewRegistry_.PrimaryActionRect())
+        {
+            viewActionRect_ = actionRect;
+        }
+    }
 
     navResizeHandleRect_ = SDL_Rect{0, 0, 0, 0};
     libraryResizeHandleRect_ = SDL_Rect{0, 0, 0, 0};

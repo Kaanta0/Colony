@@ -166,6 +166,7 @@ class Application
 
     static constexpr std::string_view kLocalAppsChannelId = "local_apps";
     static constexpr std::string_view kLocalAppsChannelLabel = "Local Apps";
+    static constexpr std::string_view kHeavenEarthProgramId = "GAMES_HEAVEN_EARTH";
 
     sdl::WindowHandle window_;
     sdl::RendererHandle renderer_;
@@ -222,6 +223,7 @@ class Application
     std::optional<SDL_Rect> libraryFilterInputRect_;
     std::vector<ui::LibraryRenderResult::SortChipHitbox> librarySortChipHitboxes_;
     std::optional<SDL_Rect> heroActionRect_;
+    std::optional<SDL_Rect> viewActionRect_;
     std::optional<SDL_Rect> hubButtonRect_;
     std::vector<ui::HubRenderResult::BranchHitbox> hubBranchHitboxes_;
     int hoveredHubBranchIndex_ = -1;
